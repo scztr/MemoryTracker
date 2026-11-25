@@ -7,7 +7,7 @@ LIBRARY = lib/libmemtracker.a
 LIB_OBJECT = build/memory_tracker.o
 
 .PHONY: all library clean
-all: $(LIBRARY)
+all: $(LIBRARY) build/scenarios.o
 library: $(LIBRARY)
 
 $(LIBRARY): $(LIB_OBJECT) | lib
@@ -22,4 +22,4 @@ build lib:
 clean:
 	$(RM) memorytracker build/*.o build/*.d $(LIBRARY)
 
--include $(LIB_OBJECT:.o=.d)
+-include build/scenarios.d $(LIB_OBJECT:.o=.d)
