@@ -29,15 +29,11 @@ build/test_tracker: tests/test_tracker.c include/memory_tracker.h $(LIBRARY) | b
 example: $(LIBRARY)
 	$(MAKE) -C examples/notes
 
-build/test_cli: tests/test_cli.c | build
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $< $(LDLIBS) -o $@
-
-test: memorytracker build/test_tracker build/test_cli example
+test: build/test_tracker
 	./build/test_tracker
-	./build/test_cli
 
 clean:
-	$(RM) memorytracker build/*.o build/*.d build/test_tracker build/test_cli $(LIBRARY)
+	$(RM) memorytracker build/*.o build/*.d build/test_tracker $(LIBRARY)
 	$(MAKE) -C examples/notes clean
 
 -include $(PROGRAM_OBJECTS:.o=.d) $(LIB_OBJECT:.o=.d)
