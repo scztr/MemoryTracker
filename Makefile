@@ -4,11 +4,15 @@ CPPFLAGS = -D_POSIX_C_SOURCE=200809L -Iinclude
 CFLAGS = -std=c11 -Wall -Wextra -Wpedantic -Werror -O2 -g
 
 LIBRARY = lib/libmemtracker.a
+PROGRAM_OBJECTS = build/main.o build/scenarios.o
 LIB_OBJECT = build/memory_tracker.o
 
 .PHONY: all library test clean
-all: $(LIBRARY) build/scenarios.o
+all: memorytracker
 library: $(LIBRARY)
+
+memorytracker: $(PROGRAM_OBJECTS) $(LIBRARY)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 $(LIBRARY): $(LIB_OBJECT) | lib
 	$(AR) rcs $@ $<
@@ -28,4 +32,4 @@ test: build/test_tracker
 clean:
 	$(RM) memorytracker build/*.o build/*.d build/test_tracker $(LIBRARY)
 
--include build/scenarios.d $(LIB_OBJECT:.o=.d)
+-include $(PROGRAM_OBJECTS:.o=.d) $(LIB_OBJECT:.o=.d)
