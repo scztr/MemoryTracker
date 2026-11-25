@@ -6,7 +6,7 @@ CFLAGS = -std=c11 -Wall -Wextra -Wpedantic -Werror -O2 -g
 LIBRARY = lib/libmemtracker.a
 LIB_OBJECT = build/memory_tracker.o
 
-.PHONY: all library clean
+.PHONY: all library test clean
 all: $(LIBRARY) build/scenarios.o
 library: $(LIBRARY)
 
@@ -19,7 +19,13 @@ build/%.o: src/%.c | build
 build lib:
 	mkdir -p $@
 
+build/test_tracker: tests/test_tracker.c include/memory_tracker.h $(LIBRARY) | build
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $< $(LIBRARY) $(LDLIBS) -o $@
+
+test: build/test_tracker
+	./build/test_tracker
+
 clean:
-	$(RM) memorytracker build/*.o build/*.d $(LIBRARY)
+	$(RM) memorytracker build/*.o build/*.d build/test_tracker $(LIBRARY)
 
 -include build/scenarios.d $(LIB_OBJECT:.o=.d)
